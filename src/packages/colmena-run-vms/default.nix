@@ -71,6 +71,7 @@ let
     set -e
     INFRA_ROOT=''${INFRA_ROOT:-.}
     HOST_IP=''${HOST_IP:-10.0.2.2}
+    COLMENA_ARGS=''${COLMENA_ARGS:-}
     TAGS=$@
     if [ -z "$TAGS" ]; then
       echo "ERR: You must supply at least one tag on the command line"
@@ -82,7 +83,7 @@ let
       HIVENIX=$INFRA_ROOT/hive.nix
     fi
     export HOST_IP
-    INFRA_DESC=$(${pkgs.colmena}/bin/colmena eval -f $HIVENIX ${./vm-params.nix})
+    INFRA_DESC=$(${pkgs.colmena}/bin/colmena eval -f $HIVENIX ${./vm-params.nix} $COLMENA_ARGS)
     ALL_VMS=""
     for tag in $TAGS; do
       SELECTOR=".vms[] | select(.tags[] | match(\"^$tag\$\")) | .launchVM"
